@@ -3,6 +3,7 @@
 #
 library(plyr)
 library(reshape)
+library(reshape2)
 # assumes that file is downloaded from link and unzipped to 
 # current directory
 setwd("~/UCI HAR Dataset/")
@@ -52,12 +53,20 @@ testTrainSet_merged <- rbind(trainSet_merged, testSet_merged)
 
 # 
 x <- names(testTrainSet_merged)
-mean_std_columns <-  x[grep("activity_ID|activityName|subject_ID|mean|std", x)]
+mean_std_columns <-  x[grep("activity_ID|activityName|subject_ID|mean\\(|std", x)]
 testTrainSet_subset <- testTrainSet_merged[, mean_std_columns]
+
+## aggregating the final dataset from testTrainSet_subset with only mean
+
+final <- aggregate(testTrainSet_subset, by = list(testTrainSet_subset$subject_ID, 
+          testTrainSet_subset$activity_ID, testTrainSet_subset$activityName) , FUN =mean) 
+
+finalset <- final[, -c(1,2,5,6)]
+colnames(finalset)[1] <- "activity_name"
 
 ## write the final tidy dataset to file
 
-write.table(testTrainSet_subset, file = "./TidyMergedSet.txt", row.names = F)
+write.table(finalset, file = "./TidyMergedSet.txt", row.names = F)
 
 ######### the codebook.md
 # labels the data set with descriptive variable names. 
