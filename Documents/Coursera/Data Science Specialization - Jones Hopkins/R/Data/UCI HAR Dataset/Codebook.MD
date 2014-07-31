@@ -11,16 +11,17 @@ setwd("~/UCI HAR Dataset/")
 # read data from files in    ./UCI HAR dataset/" folder
 
 
-trainSet    <- read.table("./train/X_train.txt")
-trainLabel  <- read.table("./train/y_train.txt")
-trainSubject    <- read.table("./train/subject_train.txt")
+# read tables:
+trainSet       from X_train dataframe
+trainLabel     from /train/y_train.txt
+trainSubject   from /ttrain/subject_train.txt
 
-testSet     <- read.table("./test/X_test.txt")
-testLabel   <- read.table("./test/y_test.txt") 
-testSubject     <- read.table("./test/subject_test.txt")
+testSet        from  /test/X_test.txt
+testLabel      from  test/y_test.txt
+testSubject    from  /test/subject_test.txt
 
-activityLabel <- read.table("./activity_labels.txt", sep = " " )
-feature <- read.table("./features.txt", header = F)
+activityLabel  from  activity_labels.txt
+feature        from features.txt
 
 # change headers into meaningful names
 colnames(feature) <- c("featureID", "featureName")
@@ -45,16 +46,24 @@ testSet_merged <- merge(activityLabel, testSet_cbind, by = "activity_ID")
 
 testTrainSet_merged <- rbind(trainSet_merged, testSet_merged)
 
-
-
-
 # Extract measurements on mean and standard deviation for each measurement.
 # 
 
-# 
 x <- names(testTrainSet_merged)
-mean_std_columns <-  x[grep("activity_ID|activityName|subject_ID|mean|std", x)]
+mean_std_columns <-  x[grep("activity_ID|activityName|subject_ID|mean\\(|std", x)]
 testTrainSet_subset <- testTrainSet_merged[, mean_std_columns]
+
+## aggregating the final dataset from testTrainSet_subset with only mean
+
+final <- aggregate(testTrainSet_subset, by = list(testTrainSet_subset$subject_ID, 
+          testTrainSet_subset$activity_ID, testTrainSet_subset$activityName) , FUN =mean) 
+
+# maiking final adjustments (delete duplicate columns, adding activity_name column)
+finalset <- final[, -c(1,2,5,6)]
+colnames(finalset)[1] <- "activity_name"
+
+- names(testTrainSet_merged)
+
 
 ## write the final tidy dataset to file
 
