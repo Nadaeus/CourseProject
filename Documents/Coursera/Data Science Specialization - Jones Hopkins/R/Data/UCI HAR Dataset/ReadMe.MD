@@ -10,8 +10,9 @@ the fastest solution I was able to conjure while deadline was approaching was to
 the code and other files. In order to download the file, please use link under 
 the file which says:"Show full version.." by right-clicking --> selecting: "save link as".
 
-* Note2: Due to my very tight scedule I wasn't able to complete section two of the project (Creates a second, independent tidy data set 
-with the average of each variable for each activity and each subject. )
+* Note2: Due to my very tight scedule I wasn't able to complete section two of 
+the project (Creates a second, independent tidy data set with the average of each 
+variable for each activity and each subject. )
 
 
 * the attached github repo link contains the following files :
